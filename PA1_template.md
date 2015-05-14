@@ -129,7 +129,7 @@ sum_NAs <- sum(NAs)
 
 
 2. Devise a strategy for filling in all of the missing values in the dataset. 
-   - The strategy will be to replace the missing values with the mean of the total steps
+   - The strategy will be to replace the missing values with the mean of that interval from the mean values calculated for each intervals in Q2 above.
 
 ```r
 names(dailypattern) <- c("time","mean")
