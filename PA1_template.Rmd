@@ -24,7 +24,7 @@ activity <- cbind(activity,time)
 str(activity)
 ```
 
-## What is mean total number of steps taken per day?
+## Q1. What is mean total number of steps taken per day?
 1. Calculating the total number of steps taken in a day by aggregating all the steps in the day. Days with NAs input are ignored
 
 ```{r}
@@ -33,22 +33,21 @@ totsteps <- aggregate(steps~date, data=activity, sum)
 ```
 2. Creating the histogram - Plotting the frequency of the total number of steps taken each day
 
-```{r}
+```{r Histogram 1}
 x <- seq(0,22000,1000)
 with(totsteps, hist(steps,breaks = x, col=rainbow(7)))
+
 ``` 
 
-3. Calculate the mean and median of the total steps taken in a day
-   The results are plotted as a line chart.
+3. Calculate the mean and median of the total steps taken per day
+   The mean and median refers to the results derived in Q1a above
 ```{r MeanMedian}
-Meansteps   <- aggregate(steps~date, data=activity,mean)
-Mediansteps <- aggregate(steps~date, data=activity,median)
-par(mfrow = c(2,1))
-plot(Meansteps$date,Meansteps$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="darkgreen")
-plot(Mediansteps$date,Mediansteps$steps,type="l",xlab="Date", ylab="Median No of Steps",col="red")
+Meansteps   <- mean(totsteps$steps)
+Mediansteps <- median(totsteps$steps)
 ```
+#### Mean = `r Meansteps`,    Median = `r Mediansteps`
 
-## What is the average daily activity pattern?
+## Q2. What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 ```{r Plot Daily Pattern}
@@ -68,7 +67,7 @@ answer
 #### and the time is `r format(answer[1],"%H:%M")`    
   
 
-## Imputing missing values
+## Q3. Imputing missing values
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 ```{r}
@@ -94,26 +93,20 @@ str(activity1)
 str(activity)
 ```
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
-```{r}
+```{r Histogram 2}
 totsteps1 <- aggregate(steps~date, data=activity1, sum)
 x <- seq(0,22000,1000)
 with(totsteps1, hist(steps,breaks = x, col=rainbow(7)))
 grid()
 
-Meansteps1   <- aggregate(steps~date, data=activity1,mean)
-Mediansteps1 <- aggregate(steps~date, data=activity1,median)
-par(mfrow = c(1,2),oma=c(0,0,2,0),mar=c(2,2,2,2))
-plot(Meansteps$date,Meansteps$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="darkgreen")
-plot(Mediansteps$date,Mediansteps$steps,type="l",xlab="Date", ylab="Mean No of Steps",col="red")
-mtext("Mean and Median Plot before imputaton",outer=TRUE)
-
-par(mfrow = c(1,2),oma=c(0,0,2,0),mar=c(2,2,2,2))
-plot(Meansteps1$date,Meansteps1$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="blue")
-plot(Mediansteps1$date,Mediansteps1$steps,type="l",xlab="Date", ylab="Mean No of Steps",col="orange")
-mtext("Mean and Median Plot after imputaton",outer=TRUE)
+Meansteps1   <- mean(totsteps1$steps)
+Mediansteps1 <- median(totsteps1$steps)
 ```
+#### Before imputation : Mean = `r Meansteps`    Median = `r Mediansteps`
+#### After imputation  : Mean = `r Meansteps1`   Median = `r Mediansteps1`
+#### There are thus no change in the mean and slight variation in the median before and after the imputation
 
-## Are there differences in activity patterns between weekdays and weekends?
+## Q4. Are there differences in activity patterns between weekdays and weekends?
 
 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
@@ -131,7 +124,7 @@ for (x in 1:length(daysofweek)){
 activity1 <- cbind(activity1,days,daysofweek)
 ```
 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
-```{r}
+```{r Time Series Plot of Weekdays and Weekends}
 library(ggplot2)
 library(scales)
 dailypattern1 <- aggregate(steps~time+days, data=activity1, mean)

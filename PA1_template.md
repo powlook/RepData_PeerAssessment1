@@ -31,10 +31,10 @@ str(activity)
 ##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
 ##  $ date    : Factor w/ 61 levels "2012-10-01","2012-10-02",..: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
-##  $ time    : POSIXct, format: "2015-05-14 00:00:00" "2015-05-14 00:05:00" ...
+##  $ time    : POSIXct, format: "2015-05-16 00:00:00" "2015-05-16 00:05:00" ...
 ```
 
-## What is mean total number of steps taken per day?
+## Q1. What is mean total number of steps taken per day?
 1. Calculating the total number of steps taken in a day by aggregating all the steps in the day. Days with NAs input are ignored
 
 
@@ -50,22 +50,18 @@ x <- seq(0,22000,1000)
 with(totsteps, hist(steps,breaks = x, col=rainbow(7)))
 ```
 
-![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
+![plot of chunk Histogram 1](figure/Histogram 1.png) 
 
-3. Calculate the mean and median of the total steps taken in a day
-   The results are plotted as a line chart.
+3. Calculate the mean and median of the total steps taken per day
+   The mean and median refers to the results derived in Q1a above
 
 ```r
-Meansteps   <- aggregate(steps~date, data=activity,mean)
-Mediansteps <- aggregate(steps~date, data=activity,median)
-par(mfrow = c(2,1))
-plot(Meansteps$date,Meansteps$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="darkgreen")
-plot(Mediansteps$date,Mediansteps$steps,type="l",xlab="Date", ylab="Median No of Steps",col="red")
+Meansteps   <- mean(totsteps$steps)
+Mediansteps <- median(totsteps$steps)
 ```
+#### Mean = 1.0766 &times; 10<sup>4</sup>,    Median = 10765
 
-![plot of chunk MeanMedian](figure/MeanMedian.png) 
-
-## What is the average daily activity pattern?
+## Q2. What is the average daily activity pattern?
 
 1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
@@ -111,13 +107,13 @@ answer
 
 ```
 ##                    time steps
-## 104 2015-05-14 08:35:00 206.2
+## 104 2015-05-16 08:35:00 206.2
 ```
 #### The highest average number in a 5-min interval is 206.1698 
 #### and the time is 08:35    
   
 
-## Imputing missing values
+## Q3. Imputing missing values
 
 1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
 
@@ -147,7 +143,7 @@ str(activity1)
 
 ```
 ## 'data.frame':	17568 obs. of  5 variables:
-##  $ time    : POSIXct, format: "2015-05-14 00:00:00" "2015-05-14 00:00:00" ...
+##  $ time    : POSIXct, format: "2015-05-16 00:00:00" "2015-05-16 00:00:00" ...
 ##  $ steps   : num  1.72 0 0 0 0 ...
 ##  $ date    : Date, format: "2012-10-01" "2012-11-23" ...
 ##  $ interval: int  0 0 0 0 0 0 0 0 0 0 ...
@@ -163,7 +159,7 @@ str(activity)
 ##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
 ##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
 ##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
-##  $ time    : POSIXct, format: "2015-05-14 00:00:00" "2015-05-14 00:05:00" ...
+##  $ time    : POSIXct, format: "2015-05-16 00:00:00" "2015-05-16 00:05:00" ...
 ```
 4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
 
@@ -174,29 +170,17 @@ with(totsteps1, hist(steps,breaks = x, col=rainbow(7)))
 grid()
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-81.png) 
+![plot of chunk Histogram 2](figure/Histogram 2.png) 
 
 ```r
-Meansteps1   <- aggregate(steps~date, data=activity1,mean)
-Mediansteps1 <- aggregate(steps~date, data=activity1,median)
-par(mfrow = c(1,2),oma=c(0,0,2,0),mar=c(2,2,2,2))
-plot(Meansteps$date,Meansteps$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="darkgreen")
-plot(Mediansteps$date,Mediansteps$steps,type="l",xlab="Date", ylab="Mean No of Steps",col="red")
-mtext("Mean and Median Plot before imputaton",outer=TRUE)
+Meansteps1   <- mean(totsteps1$steps)
+Mediansteps1 <- median(totsteps1$steps)
 ```
+#### Before imputation : Mean = 1.0766 &times; 10<sup>4</sup>    Median = 10765
+#### After imputation  : Mean = 1.0766 &times; 10<sup>4</sup>   Median = 1.0766 &times; 10<sup>4</sup>
+#### There are thus no change in the mean and slight variation in the median before and after the imputation
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-82.png) 
-
-```r
-par(mfrow = c(1,2),oma=c(0,0,2,0),mar=c(2,2,2,2))
-plot(Meansteps1$date,Meansteps1$steps,type="l",xlab ="Date", ylab= "Mean No of Steps",col="blue")
-plot(Mediansteps1$date,Mediansteps1$steps,type="l",xlab="Date", ylab="Mean No of Steps",col="orange")
-mtext("Mean and Median Plot after imputaton",outer=TRUE)
-```
-
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-83.png) 
-
-## Are there differences in activity patterns between weekdays and weekends?
+## Q4. Are there differences in activity patterns between weekdays and weekends?
 
 1. Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
@@ -227,5 +211,5 @@ ggplot(dailypattern1, aes(x= time, y=steps)) +
     labs(title="Daily Plot - Average No of Steps in 5 mins interval")
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
+![plot of chunk Time Series Plot of Weekdays and Weekends](figure/Time Series Plot of Weekdays and Weekends.png) 
 
